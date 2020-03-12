@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
 import { Button, Form, Container, Row } from 'react-bootstrap';
-import Axios from 'axios';
+// import Axios from 'axios';
 
 
 
@@ -9,36 +9,36 @@ import Axios from 'axios';
 
 
 export default class Router extends React.Component {
-    state = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        password: ''
-    };
+    // state = {
+    //     firstName: '',
+    //     lastName: '',
+    //     username: '',
+    //     email: '',
+    //     password: ''
+    // };
 
-    handleChange = event => {
-        this.setState({name: event.target.value});
-    }
+    // handleChange = event => {
+    //     this.setState({name: event.target.value});
+    // }
 
-    handleSubmit = event => {
-        event.preventDefault();
-        console.log(this.state);
+    // handleSubmit = event => {
+    //     event.preventDefault();
+    //     console.log(this.state);
 
-        const payload = {
-            firstName: this.state.name,
-            lastName: this.state.name,
-            username: this.state.name,
-            email: this.state.name,
-            password: this.state.name
-        }
+    //     const payload = {
+    //         firstName: this.state.name,
+    //         lastName: this.state.name,
+    //         username: this.state.name,
+    //         email: this.state.name,
+    //         password: this.state.name
+    //     }
 
-        Axios.post('https://localhost:3000/createaccount', { payload })
-            .then(res => {
-           console.log(res);
-           console.log(res.data)
-       });
-    }
+    //     Axios.post('https://localhost:3000/createaccount', { payload })
+    //         .then(res => {
+    //        console.log(res);
+    //        console.log(res.data)
+    //    });
+    // }
 
     
        
@@ -132,14 +132,14 @@ function Login() {
 function CreateAccount() {
     return (
         <Container>
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
                 <Form.Row>
                     <Form.Group>
                         <Form.Control 
                             type="text" 
                             name="firstName" 
                             placeholder="First Name" 
-                            onChange={this.handleChange} 
+                            
                             required 
                         />
                     </Form.Group>
@@ -150,7 +150,7 @@ function CreateAccount() {
                             type="text" 
                             name="lastName"
                             placeholder="Last Name" 
-                            onChange={this.handleChange} 
+                            
                             required 
                         />
                     </Form.Group>
@@ -161,7 +161,7 @@ function CreateAccount() {
                             type="text" 
                             name="username"
                             placeholder="Username" 
-                            onChange={this.handleChange} 
+                            
                             required 
                         />
                     </Form.Group>
@@ -172,7 +172,7 @@ function CreateAccount() {
                             type="email" 
                             name="email"
                             placeholder="Email" 
-                            onChange={this.handleChange} 
+                            
                             required 
                         />
                     </Form.Group>
@@ -183,7 +183,7 @@ function CreateAccount() {
                             type="password" 
                             name="password"
                             placeholder="Password" 
-                            onChange={this.handleChange} 
+                            
                             required 
                         />
                     </Form.Group>
