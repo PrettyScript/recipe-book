@@ -1,11 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
-import { Button, Form, Container, Row } from 'react-bootstrap';
-// import Axios from 'axios';
-
-
-
-
+import { Button, Form, Container, Row, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
 
 export default class Router extends React.Component {
@@ -25,13 +21,13 @@ export default class Router extends React.Component {
     //     event.preventDefault();
     //     console.log(this.state);
 
-    //     const payload = {
-    //         firstName: this.state.name,
-    //         lastName: this.state.name,
-    //         username: this.state.name,
-    //         email: this.state.name,
-    //         password: this.state.name
-    //     }
+        // let payload = {
+        //     firstName: this.state.name,
+        //     lastName: this.state.name,
+        //     username: this.state.name,
+        //     email: this.state.name,
+        //     password: this.state.name
+        // }
 
     //     Axios.post('https://localhost:3000/createaccount', { payload })
     //         .then(res => {
@@ -40,8 +36,6 @@ export default class Router extends React.Component {
     //    });
     // }
 
-    
-       
     
 
     render() {  
@@ -81,30 +75,156 @@ export default class Router extends React.Component {
     }
 }
 
+ function fetchSavedRecipes(e) {
+    e.preventDefault()
+
+    let username = document.getElementById('username').value;
+    
+    
+
+    let payload = {
+        username: username
+    }
+
+   
+    
+
+    axios.post('http://localhost:3000/homePage', payload)
+        .then((data) => {
+    
+        
+        // let summary = document.getElementById('summary')
+
+    console.log(data); // JSON data parsed by `response.json()` call
+    console.log(data.data[0].title)
+   
+    data.data.map((el) => {
+
+       
+        console.log(el.title)
+        Test(el)
+   
+    })
+    
+    // const map = data.map(x => {
+    //     return x;
+    // })
+
+    // console.log(map);
+
+    // let text = ''
+
+    // for (let i = 0; i < data.length; i++) {
+    //  text += data.data[i].title;
+        
+    // }
+
+    // console.log(text);
+
+    // summary.dangerouslySetInnerHTML= `${text}`
+
+
+    }).catch((err) => {console.log(err)});
+
+    
+    
+}
+
+const names = ["whale", "squid", "turtle", "coral", "starfish"];
+
+const NamesList = () => (
+  <div>
+    <ul>{names.map(name => <li key={name}> {name} </li>)}</ul>
+  </div>
+);
+
+const Test= (el) => (
+    <div>
+    <ul>
+        <li key={el.title}> {el.title}</li>
+    </ul>
+</div>
+);
+
+
+
 
 function Home() {
+    
     return (
         <div>
-            <h1>
-                Welcome home!
-            </h1>
+            
+            <Form onSubmit={fetchSavedRecipes}>
+                <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" id="username" placeholder="Enter username" />
+                    <p id="summary"></p>
+                    
+                </Form.Group>
+                <button type="submit">Submit</button>
+            </Form>
+            <NamesList />
+            <Test />
         </div>
     );
 }
 
+function handleOnLoginSubmit (e) {
+
+    e.preventDefault();
+
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+
+    let payload = {
+        username: username,
+        password: password
+      };
+
+   
+
+      axios.post('http://localhost:3000/login', payload)
+        .then((data) => {
+
+        // let unsucessfulLogin = document.getElementById('forgotPassword');
+        
+        if(data.length === 0) {
+           return ( 
+               <Alert variant="danger">
+                    <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                        <p>
+                        Change this and that and try again. Duis mollis, est non commodo
+                        luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                        Cras mattis consectetur purus sit amet fermentum.
+                        </p>
+                </Alert>)
+                
+            // unsucessfulLogin.innerHTML=`We can't find that username and password. You can reset your password or try again.`
+        } else {
+            // fetchData(username); 
+            window.open('/')
+            // console.log('success')
+        }
+      console.log(data); // JSON data parsed by `response.json()` call
+    }).catch((err) => {console.log(err)});
+
+    console.log(username, password)
+}
+
 function Login() {
+
     return (
         <Container>
             <Row>
-            <Form>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
+            <Form onSubmit={handleOnLoginSubmit}>
+                <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" id="username" placeholder="Enter username" />
                 </Form.Group>
             
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control type="password" id="password" placeholder="Password" />
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember Me" />
@@ -129,17 +249,47 @@ function Login() {
         
     );
 }
+
+function handleNewAccount(e) {
+    e.preventDefault();
+
+    let firstName = document.getElementById('firstName').value;
+    let lastName = document.getElementById('lastName').value;
+    let username = document.getElementById('username').value;
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+
+    let payload = {
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+        email: email,
+        password: password
+      };
+
+    console.log(firstName, lastName, username, email, password);
+
+    //somehow get the form button to send over data to connection.query
+    //get the api to speak to the server
+    
+
+      axios.post('http://localhost:3000/addUser', payload)
+        .then((data) => {
+      console.log(data); // JSON data parsed by `response.json()` call
+    }).catch((err) => {console.log(err)});
+}
+
 function CreateAccount() {
     return (
         <Container>
-            <Form>
+            <Form onSubmit={handleNewAccount}>
                 <Form.Row>
                     <Form.Group>
                         <Form.Control 
                             type="text" 
                             name="firstName" 
                             placeholder="First Name" 
-                            
+                            id="firstName"
                             required 
                         />
                     </Form.Group>
@@ -150,7 +300,7 @@ function CreateAccount() {
                             type="text" 
                             name="lastName"
                             placeholder="Last Name" 
-                            
+                            id="lastName"
                             required 
                         />
                     </Form.Group>
@@ -161,7 +311,7 @@ function CreateAccount() {
                             type="text" 
                             name="username"
                             placeholder="Username" 
-                            
+                            id="username"
                             required 
                         />
                     </Form.Group>
@@ -172,7 +322,7 @@ function CreateAccount() {
                             type="email" 
                             name="email"
                             placeholder="Email" 
-                            
+                            id="email"
                             required 
                         />
                     </Form.Group>
@@ -183,7 +333,7 @@ function CreateAccount() {
                             type="password" 
                             name="password"
                             placeholder="Password" 
-                            
+                            id="password"
                             required 
                         />
                     </Form.Group>
@@ -193,37 +343,83 @@ function CreateAccount() {
         </Container>
     );
 }
+
+function handleCreatedRecipes(e) {
+    e.preventDefault();
+
+    let username = document.getElementById('username').value;
+    let title = document.getElementById('title').value;
+    let description = document.getElementById('description').value;
+    let ingredients = document.getElementById('ingredients').value;
+    let instructions = document.getElementById('instructions').value;
+
+    let payload = {
+        username: username,
+        title: title,
+        description: description,
+        ingredients: ingredients,
+        instructions: instructions
+    }
+
+    console.log(username, title, description, ingredients, instructions);
+
+    axios.post('http://localhost:3000/saveRecipe', payload)
+        .then((data) => {
+      console.log(data); // JSON data parsed by `response.json()` call
+    }).catch((err) => {console.log(err)});
+}
+
 function CreateRecipes() {
     return (
         <Container>
-            <Form>
+            <Form onSubmit={handleCreatedRecipes}>
                 <Form.Row>
                     <Form.Group>
-                        <Form.Control type="text" placeholder="username" />
+                        <Form.Control 
+                            type="text" 
+                            placeholder="username" 
+                            id="username" 
+                        />
                     </Form.Group>
                  </Form.Row>
                 <Form.Row>
                     <Form.Group>
                         <Form.Label>Recipe Title:</Form.Label>
-                        <Form.Control type="text" />
+                        <Form.Control 
+                            type="text" 
+                            id="title" 
+                            required 
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group>
                         <Form.Label>Description:</Form.Label>
-                        <Form.Control as="textarea" rows="3" />
+                        <Form.Control 
+                            as="textarea" 
+                            rows="3" 
+                            id="description" 
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group>
                         <Form.Label>Ingredients</Form.Label>
-                        <Form.Control as="textarea" rows="3" />
+                        <Form.Control 
+                            as="textarea" 
+                            rows="3" 
+                            id="ingredients"
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group>
                         <Form.Label>instructions</Form.Label>
-                        <Form.Control as="textarea" rows="3" />
+                        <Form.Control 
+                            as="textarea" 
+                            rows="3" 
+                            id="instructions"
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Button variant="dark" type="submit">Submit</Button>
@@ -231,14 +427,27 @@ function CreateRecipes() {
         </Container>
     );
 }
+
+function handleResetPassword() {
+    let message = document.getElementById('resetMessage');
+    let emailInput = document.getElementById('email').value;
+
+    if(emailInput.length === 0) {
+        message.innerHTML='please fill out the field.'
+    } else {
+        message.innerHTML='password email sent!'
+    }
+
+}
+
 function ResetPassword() {
     return (
         <Container>
             <h3>Forgot Password/Username?</h3>
-            <p>Enter the email address you used to register and we'll email you the password reset instructions.</p>
+            <p id="resetMessage">Enter the email address you used to register and we'll email you the password reset instructions.</p>
             <label type="text" label="Email">Email:</label>
-            <input type="text" required />
-            <button type="button">Send reset instructions</button>
+            <input type="text" id="email" required />
+            <button type="button" onClick={handleResetPassword}>Send reset instructions</button>
         </Container>
     );
 }
