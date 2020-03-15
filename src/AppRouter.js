@@ -5,39 +5,6 @@ import axios from 'axios';
 
 
 export default class Router extends React.Component {
-    // state = {
-    //     firstName: '',
-    //     lastName: '',
-    //     username: '',
-    //     email: '',
-    //     password: ''
-    // };
-
-    // handleChange = event => {
-    //     this.setState({name: event.target.value});
-    // }
-
-    // handleSubmit = event => {
-    //     event.preventDefault();
-    //     console.log(this.state);
-
-        // let payload = {
-        //     firstName: this.state.name,
-        //     lastName: this.state.name,
-        //     username: this.state.name,
-        //     email: this.state.name,
-        //     password: this.state.name
-        // }
-
-    //     Axios.post('https://localhost:3000/createaccount', { payload })
-    //         .then(res => {
-    //        console.log(res);
-    //        console.log(res.data)
-    //    });
-    // }
-
-    
-
     render() {  
         return (
             <BrowserRouter>
@@ -74,97 +41,51 @@ export default class Router extends React.Component {
         );
     }
 }
-
- function fetchSavedRecipes(e) {
-    e.preventDefault()
-
-    let username = document.getElementById('username').value;
+const FetchSavedRecipes = () => {
     
-    
-
+    let username = 'test';
     let payload = {
         username: username
     }
-
-   
+    let text = ''
     
 
     axios.post('http://localhost:3000/homePage', payload)
-        .then((data) => {
-    
-        
-        // let summary = document.getElementById('summary')
+    .then((data) => {
+    let summary = document.getElementById('summary')
+    console.log(data);
 
-    console.log(data); // JSON data parsed by `response.json()` call
-    console.log(data.data[0].title)
+    for (let i = 0; i < data.data.length; i++) {
+     text += (data.data[i].title + "<br>");
+    }
+
+    summary.innerHTML = `${text}`
+    console.log(text)
+  
+    }).catch((err) => {console.log(err) });
+
+    //get Users' first name
+    axios.post('http://localhost:3000/getName', payload)
+    .then((data) => {
    
-    data.data.map((el) => {
-
-       
-        console.log(el.title)
-        Test(el)
-   
-    })
+    console.log(data); 
     
-    // const map = data.map(x => {
-    //     return x;
-    // })
+    let firstName = document.getElementById('username');
+    firstName.innerHTML = data.data[0].first_name;
+  
+    }).catch((err) => {console.log(err) });
 
-    // console.log(map);
-
-    // let text = ''
-
-    // for (let i = 0; i < data.length; i++) {
-    //  text += data.data[i].title;
-        
-    // }
-
-    // console.log(text);
-
-    // summary.dangerouslySetInnerHTML= `${text}`
-
-
-    }).catch((err) => {console.log(err)});
-
-    
+    return (<div></div>);
     
 }
-
-const names = ["whale", "squid", "turtle", "coral", "starfish"];
-
-const NamesList = () => (
-  <div>
-    <ul>{names.map(name => <li key={name}> {name} </li>)}</ul>
-  </div>
-);
-
-const Test= (el) => (
-    <div>
-    <ul>
-        <li key={el.title}> {el.title}</li>
-    </ul>
-</div>
-);
-
-
-
 
 function Home() {
     
     return (
         <div>
-            
-            <Form onSubmit={fetchSavedRecipes}>
-                <Form.Group>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" id="username" placeholder="Enter username" />
-                    <p id="summary"></p>
-                    
-                </Form.Group>
-                <button type="submit">Submit</button>
-            </Form>
-            <NamesList />
-            <Test />
+            <h1>Hello <span id="username"></span> </h1>
+             <p id="summary"></p>
+            <FetchSavedRecipes />
         </div>
     );
 }
@@ -242,7 +163,6 @@ function Login() {
                         Don’t have an account? Sign Up!
                     </Form.Text>
                 </NavLink>
-                
             </Form>
         </Row>
       </Container>
