@@ -3,8 +3,120 @@ import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
 import { Button, Form, Container, Row, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
+//might look into redux because it can pass in the username date and update the state there.
+
 
 export default class Router extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            username: 'Jess'
+        }
+    }
+
+    // onUsernameChange = (username) => {
+    //     console.log('changing username')
+    //     this.setState({username: username});
+    // }
+
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    handleOnLoginSubmit = (e) => {
+        e.preventDefault();
+    
+    
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+    
+        this.setState({username: username}, () => {this.fetchSavedRecipes();})
+        
+    
+        let payload = {
+            username: username,
+            password: password
+          };
+    
+       
+    
+          axios.post('http://localhost:3000/login', payload)
+            .then((data) => {
+    
+            // let unsucessfulLogin = document.getElementById('forgotPassword');
+            
+            if(data.length === 0) {
+               return ( 
+                   <Alert variant="danger">
+                        <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                            <p>
+                            Change this and that and try again. Duis mollis, est non commodo
+                            luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                            Cras mattis consectetur purus sit amet fermentum.
+                            </p>
+                    </Alert>)
+                    
+                // unsucessfulLogin.innerHTML=`We can't find that username and password. You can reset your password or try again.`
+            } else {
+                // fetchData(username); 
+                window.open('/')
+                // console.log('success')
+            }
+          console.log(data); // JSON data parsed by `response.json()` call
+        }).catch((err) => {console.log(err)});
+    
+        console.log(username, password)
+    }
+
+    fetchSavedRecipes = () => {
+        // e.preventDefault();
+
+        let username = this.state.username;
+        console.log('this is the username!!' + username)
+        let payload = {
+            username: username
+        }
+        let text = ''
+        
+
+        axios.post('http://localhost:3000/homePage', payload)
+        .then((data) => {
+        this.setState({data: data.data});
+        let summary = document.getElementById('summary')
+        console.log(data);
+
+        for (let i = 0; i < data.data.length; i++) {
+        text += (data.data[i].title + "<br>");
+        }
+
+        
+
+        summary.innerHTML = `${text}`
+        console.log(text)
+    
+        }).catch((err) => {console.log(err) });
+
+        //get Users' first name
+        axios.post('http://localhost:3000/getName', payload)
+        .then((data) => {
+        this.setState({first_name:data.data[0].first_name,})
+        console.log(data); 
+        
+
+        //doesn't work
+        let firstName = document.getElementById('username');
+        firstName.innerHTML = data.data[0].first_name;
+    
+        }).catch((err) => {console.log(err) });
+
+    }
+
+    getSavedRecipes = () => {
+        return {data: this.state.data, first_name: this.state.first_name}
+    }
+
     render() {  
         return (
             <BrowserRouter>
@@ -21,10 +133,15 @@ export default class Router extends React.Component {
                 <div>
                     <Switch>
                         <Route exact path="/">
-                            <Home />
+                            <Home getSavedRecipes={this.getSavedRecipes} />
                         </Route>
-                        <Route path="/login">
-                            <Login />
+                        <Route 
+                            path="/login"
+                            render={props => (
+                                <Home {... props} username={this.state.username} />
+                            )}
+                        >
+                            <Login handleOnLoginSubmit={this.handleOnLoginSubmit}/>
                         </Route>
                         <Route path="/createAccount">
                             <CreateAccount />
@@ -41,111 +158,59 @@ export default class Router extends React.Component {
         );
     }
 }
-const FetchSavedRecipes = () => {
+
+const FetchSavedRecipes = (props) => {
     
-    let username = 'test';
-    let payload = {
-        username: username
-    }
-    let text = ''
-    
-
-    axios.post('http://localhost:3000/homePage', payload)
-    .then((data) => {
-    let summary = document.getElementById('summary')
-    console.log(data);
-
-    for (let i = 0; i < data.data.length; i++) {
-     text += (data.data[i].title + "<br>");
-    }
-
-    summary.innerHTML = `${text}`
-    console.log(text)
-  
-    }).catch((err) => {console.log(err) });
-
-    //get Users' first name
-    axios.post('http://localhost:3000/getName', payload)
-    .then((data) => {
-   
-    console.log(data); 
-    
-    let firstName = document.getElementById('username');
-    firstName.innerHTML = data.data[0].first_name;
-  
-    }).catch((err) => {console.log(err) });
-
-    return (<div></div>);
+    let info = props.getSavedRecipes();
+    console.log("info on FetchSavedRecipes: ",info.first_name, info.recipes)
+    return (<div>
+            <p>`Saved Recipes: ${info.data}`</p>
+            <p>`first name: {info.first_name}`</p>
+            </div>);
     
 }
 
-function Home() {
+//get username from the login to pass to homepage
+function Home(props) {
     
     return (
         <div>
             <h1>Hello <span id="username"></span> </h1>
              <p id="summary"></p>
-            <FetchSavedRecipes />
+            <FetchSavedRecipes getSavedRecipes={props.getSavedRecipes} />
         </div>
     );
 }
 
-function handleOnLoginSubmit (e) {
 
-    e.preventDefault();
 
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-
-    let payload = {
-        username: username,
-        password: password
-      };
-
-   
-
-      axios.post('http://localhost:3000/login', payload)
-        .then((data) => {
-
-        // let unsucessfulLogin = document.getElementById('forgotPassword');
-        
-        if(data.length === 0) {
-           return ( 
-               <Alert variant="danger">
-                    <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                        <p>
-                        Change this and that and try again. Duis mollis, est non commodo
-                        luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                        Cras mattis consectetur purus sit amet fermentum.
-                        </p>
-                </Alert>)
-                
-            // unsucessfulLogin.innerHTML=`We can't find that username and password. You can reset your password or try again.`
-        } else {
-            // fetchData(username); 
-            window.open('/')
-            // console.log('success')
-        }
-      console.log(data); // JSON data parsed by `response.json()` call
-    }).catch((err) => {console.log(err)});
-
-    console.log(username, password)
-}
-
-function Login() {
+const Login = (props) => {
 
     return (
         <Container>
             <Row>
-            <Form onSubmit={handleOnLoginSubmit}>
+            <Form onSubmit={props.handleOnLoginSubmit}>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" id="username" placeholder="Enter username" />
+                    <Form.Control 
+                        name="username"
+                        id="username" 
+                        onChange={e => this.onChange(e)}
+                        placeholder="Enter username"
+                        value={this.state.username} 
+                    />
                 </Form.Group>
             
                 <Form.Group>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" id="password" placeholder="Password" />
+                    <Form.Control 
+                        type="password" 
+                        name="password"
+                        id="password" 
+                        placeholder="Password" 
+                        onChange={e => this.onChange(e)}
+                        value={this.state.password}
+                    />
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember Me" />
