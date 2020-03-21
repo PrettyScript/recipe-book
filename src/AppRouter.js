@@ -1,174 +1,104 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
-import { Button, Form, Container, Row, Alert } from 'react-bootstrap';
+import { Button, Form, Container, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import Test from './components/testPage';
+import Home from './components/HomePage';
+import Login from './components/LoginPage';
+import Test2 from './components/test2Page';
+import { UserContext } from './UserContext';
+import Posts from './components/Posts';
+
+import { Provider } from 'react-redux';
+import store from './store';
+
+
+//Provider is the glue for react and redux
+
 
 
 export default class Router extends React.Component {
-    render() {  
+    constructor() {
+        super();
+
+        this.state = {
+            username: 'it works!'
+        }
+      
+    }
+
+
+    // another way to use UserContext but component not accepting it so it's best to just pass the value inline 
+    // const [value, setValue] = useState('hello from context');
+    
+
+    render() {
+        
+      
         return (
-            <BrowserRouter>
-                <div>
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/login">Login</NavLink>
-                    <NavLink to="/createaccount">Create Account</NavLink>
-                    <NavLink to="/createrecipes">Create Recipes</NavLink>
-                    <NavLink to="/resetpassword">Reset Password</NavLink>
-                </div>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <div>
+                        <NavLink to="/">Home</NavLink>
+                        <NavLink to="/login">Login</NavLink>
+                        <NavLink to="/createaccount">Create Account</NavLink>
+                        <NavLink to="/createrecipes">Create Recipes</NavLink>
+                        <NavLink to="/resetpassword">Reset Password</NavLink>
+                        <NavLink to="/test">Test Page</NavLink>
+                        <NavLink to="/test2">Test 2 Page</NavLink>
+                        <NavLink to="/posts">Redux Example Posts</NavLink>
+                    </div>
 
-                <hr /> 
+                    <hr /> 
 
-                <div>
-                    <Switch>
-                        <Route exact path="/">
-                            <Home />
-                        </Route>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
-                        <Route path="/createAccount">
-                            <CreateAccount />
-                        </Route>
-                        <Route path="/createrecipes">
-                            <CreateRecipes />
-                        </Route>
-                        <Route path="/resetpassword">
-                            <ResetPassword />
-                        </Route>
-                    </Switch>
-                </div>
-            </BrowserRouter>
+                    <div>
+                        <Switch>
+                            <Route 
+                                exact 
+                                path="/" 
+                                render={props => (
+                                    <Home {... props} handleLogin={this.handleLogin} 
+                                    />
+                                )}
+                            />
+                            <Route 
+                                path="/login" 
+                                component={Login}
+                                handleOnLoginSubmit={this.handleOnLoginSubmit}
+                            />
+                            <Route path="/createAccount">
+                                <CreateAccount />
+                            </Route>
+                            <Route path="/createrecipes">
+                                <CreateRecipes />
+                            </Route>
+                            <Route path="/resetpassword">
+                                <ResetPassword />
+                            </Route>
+                            <Route 
+                                path="/posts"
+                                component={Posts}
+                            />
+                            <UserContext.Provider value='hello from context'>
+                                <Route 
+                                    path="/test"
+                                    render={props => (
+                                        <Test {... props} username={this.state.username} />
+                                    )}
+                                /> 
+                                <Route 
+                                        path="/test2"
+                                        component={Test2}
+                                />
+                            </UserContext.Provider>
+                        </Switch>
+                    </div>
+                </BrowserRouter>
+            </Provider>
         );
     }
 }
-const FetchSavedRecipes = () => {
-    
-    let username = 'test';
-    let payload = {
-        username: username
-    }
-    let text = ''
-    
 
-    axios.post('http://localhost:3000/homePage', payload)
-    .then((data) => {
-    let summary = document.getElementById('summary')
-    console.log(data);
-
-    for (let i = 0; i < data.data.length; i++) {
-     text += (data.data[i].title + "<br>");
-    }
-
-    summary.innerHTML = `${text}`
-    console.log(text)
-  
-    }).catch((err) => {console.log(err) });
-
-    //get Users' first name
-    axios.post('http://localhost:3000/getName', payload)
-    .then((data) => {
-   
-    console.log(data); 
-    
-    let firstName = document.getElementById('username');
-    firstName.innerHTML = data.data[0].first_name;
-  
-    }).catch((err) => {console.log(err) });
-
-    return (<div></div>);
-    
-}
-
-function Home() {
-    
-    return (
-        <div>
-            <h1>Hello <span id="username"></span> </h1>
-             <p id="summary"></p>
-            <FetchSavedRecipes />
-        </div>
-    );
-}
-
-function handleOnLoginSubmit (e) {
-
-    e.preventDefault();
-
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-
-    let payload = {
-        username: username,
-        password: password
-      };
-
-   
-
-      axios.post('http://localhost:3000/login', payload)
-        .then((data) => {
-
-        // let unsucessfulLogin = document.getElementById('forgotPassword');
-        
-        if(data.length === 0) {
-           return ( 
-               <Alert variant="danger">
-                    <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                        <p>
-                        Change this and that and try again. Duis mollis, est non commodo
-                        luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                        Cras mattis consectetur purus sit amet fermentum.
-                        </p>
-                </Alert>)
-                
-            // unsucessfulLogin.innerHTML=`We can't find that username and password. You can reset your password or try again.`
-        } else {
-            // fetchData(username); 
-            window.open('/')
-            // console.log('success')
-        }
-      console.log(data); // JSON data parsed by `response.json()` call
-    }).catch((err) => {console.log(err)});
-
-    console.log(username, password)
-}
-
-function Login() {
-
-    return (
-        <Container>
-            <Row>
-            <Form onSubmit={handleOnLoginSubmit}>
-                <Form.Group>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" id="username" placeholder="Enter username" />
-                </Form.Group>
-            
-                <Form.Group>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" id="password" placeholder="Password" />
-                </Form.Group>
-                <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Remember Me" />
-                </Form.Group>
-                <Button variant="dark" type="submit">Submit</Button>
-                <NavLink to="/resetpassword">
-                    <Form.Text  
-                        className="text-muted">
-                        Forgot password/username?
-                    </Form.Text>
-                </NavLink>
-                <NavLink to="/createaccount">
-                    <Form.Text  
-                        className="text-muted">
-                        Don’t have an account? Sign Up!
-                    </Form.Text>
-                </NavLink>
-            </Form>
-        </Row>
-      </Container>
-        
-    );
-}
 
 function handleNewAccount(e) {
     e.preventDefault();
