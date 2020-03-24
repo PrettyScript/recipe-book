@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
-import { Button, Form, Container, Alert } from 'react-bootstrap';
+import { Button, Form, Container } from 'react-bootstrap';
 import axios from 'axios';
 import Test from './components/testPage';
 import Home from './components/HomePage';

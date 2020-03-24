@@ -3,6 +3,7 @@ import axios from 'axios';
 
 
 export default class Home extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
 

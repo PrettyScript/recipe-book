@@ -58,7 +58,7 @@ Posts.propTypes = {
     newPost: PropTypes.object
 }
 
-//maps state to props: we can get the state from redux and map it to properities of the component and use it inside of our component
+//maps state to props: we can get the state from redux and map it to properties of the component and use it inside of our component
 
 const mapStateToProps = state => ({
     //we use posts here because that is the name that we used in our reducer, so it can be called whatever you want 

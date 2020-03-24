@@ -2,7 +2,7 @@
 
 //for our actions, we create types and they are constant
 
-import { FETCH_POSTS, NEW_POST } from '../actions/types';
+import { FETCH_POSTS, NEW_POST } from '../actions/exampleTypes';
 
 const initialState = {
     items: [],
