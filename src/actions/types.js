@@ -1,2 +1,3 @@
 export const FETCH_USER = 'FETCH_USER';
+export const FETCH_USER_FAILED = 'FETCH_USER_FAILED';
 export const CURRENT_USER = 'CURRENT_USER';

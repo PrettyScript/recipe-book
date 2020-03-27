@@ -17,7 +17,7 @@ class Login extends React.Component {
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-
+        
     }
 
     onChange(e) {
@@ -26,36 +26,22 @@ class Login extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.fetchUser(this.state.username, this.state.password);
+        this.props.fetchUser(this.state.username, this.state.password)
+        .then((data) => {
+            if(!data) {
+                console.log('nay');
+                document.getElementById('errorMessage').innerHTML = 'try again'
+            } else {
+                console.log('yay');
+                this.props.history.push("/");
+            }
+        })
+        .catch((err) => {
+            console.log(err, 'error')
+        });
 
-
-        
-        // const post = {
-        //     username: this.props.username
-        //     // password: this.state.password
-        // }
-        
-
-        // this.props.currentUser(post);
-
-        // if(this.state.data.length === 0) {
-        //     return 'sorry try again'
-        // } else {
-        //     return 'successful!'
-        // }
     }
 
-    
-
-   
-
-  
-
-    
-
-            
-    //         if(data.length === 0) {
-    //            return ( 
     //                <Alert variant="danger">
     //                     <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
     //                         <p>
@@ -64,17 +50,8 @@ class Login extends React.Component {
     //                         Cras mattis consectetur purus sit amet fermentum.
     //                         </p>
     //                 </Alert>)
-                    
-    //             // unsucessfulLogin.innerHTML=`We can't find that username and password. You can reset your password or try again.`
-    //         } else {
-    //             // this.props.handleDisplayName(data);
-    //             window.open('/')
-    //             // console.log('success')
-    //         }
-    //       console.log(data); // JSON data parsed by `response.json()` call
-    //     }).catch((err) => {console.log(err)});
-    
-    // }
+                  
+   
 
     render() {
         return (
@@ -107,6 +84,7 @@ class Login extends React.Component {
                     <Form.Check type="checkbox" label="Remember Me" />
                 </Form.Group>
                 <Button variant="dark" type="submit">Submit</Button>
+                <p id="errorMessage"></p>
                 <NavLink to="/resetpassword">
                     <Form.Text  
                         className="text-muted">

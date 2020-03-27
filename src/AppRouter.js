@@ -25,9 +25,13 @@ export default class Router extends React.Component {
             username: 'it works!'
         }
       
+        // this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
     }
 
-
+    // handleSuccessfulAuth(data) {
+    //     // this.props.handleLogin(data);
+    //     this.props.history.push("/");
+    //   }
     // another way to use UserContext but component not accepting it so it's best to just pass the value inline 
     // const [value, setValue] = useState('hello from context');
     
@@ -64,7 +68,7 @@ export default class Router extends React.Component {
                             <Route 
                                 path="/login" 
                                 component={Login}
-                                handleOnLoginSubmit={this.handleOnLoginSubmit}
+                                // handleSuccessfulAuth={this.handleSuccessfulAuth}
                             />
                             <Route path="/createAccount">
                                 <CreateAccount />

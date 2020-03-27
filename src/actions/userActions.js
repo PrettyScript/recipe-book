@@ -2,15 +2,17 @@ import { FETCH_USER, CURRENT_USER } from './types';
 import axios from 'axios';
 
 export const fetchUser = (username, password ) => dispatch => {
-    axios.post('http://localhost:3000/login', {username, password})
+    return axios.post('http://localhost:3000/login', {username, password})
         .then((data) => {
-                let firstName = data.data[0];
-                console.log(firstName)
-                dispatch(successfulLogin(data)) 
-
-            })
+            let firstName = data.data[0];
+            console.log(firstName)
+            dispatch(successfulLogin(data)) 
+            return firstName;
+        })
         .catch((err) => {
-            console.log(err)});
+            console.log(err);
+            return err;
+        });
 }
 
 const successfulLogin = (data) => {
