@@ -20,7 +20,7 @@ export default class Router extends React.Component {
         super();
 
         this.state = {
-            username: ''
+            username: 'test'
         }
       
         // this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
