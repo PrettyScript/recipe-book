@@ -9,9 +9,7 @@ import Login from './components/LoginPage';
 import { AuthProvider } from './Auth';
 import PrivateRoute from './PrivateRoute';
 import SignUp from './SignUp';
-
-
-//Provider is the glue for react and redux
+import CreateRecipes from './components/CreateRecipes';
 
 
 
@@ -63,7 +61,10 @@ export default class Router extends React.Component {
                             <Route path="/signup">
                                 <SignUp />
                             </Route>
-                            <Route path="/createrecipes">
+                            <Route 
+                                path="/createrecipes"
+                                component={CreateRecipes}
+                            >
                                 <CreateRecipes />
                             </Route>
                             <Route path="/resetpassword">
@@ -109,89 +110,9 @@ function handleNewAccount(e) {
 
 
 
-function handleCreatedRecipes(e) {
-    e.preventDefault();
 
-    let username = document.getElementById('username').value;
-    let title = document.getElementById('title').value;
-    let description = document.getElementById('description').value;
-    let ingredients = document.getElementById('ingredients').value;
-    let instructions = document.getElementById('instructions').value;
 
-    let payload = {
-        username: username,
-        title: title,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions
-    }
 
-    console.log(username, title, description, ingredients, instructions);
-
-    axios.post('http://localhost:3000/saveRecipe', payload)
-        .then((data) => {
-      console.log(data); // JSON data parsed by `response.json()` call
-    }).catch((err) => {console.log(err)});
-}
-
-function CreateRecipes() {
-    return (
-        <Container>
-            <Form onSubmit={handleCreatedRecipes}>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="username" 
-                            id="username" 
-                        />
-                    </Form.Group>
-                 </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Label>Recipe Title:</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            id="title" 
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Label>Description:</Form.Label>
-                        <Form.Control 
-                            as="textarea" 
-                            rows="3" 
-                            id="description" 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Label>Ingredients</Form.Label>
-                        <Form.Control 
-                            as="textarea" 
-                            rows="3" 
-                            id="ingredients"
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Label>instructions</Form.Label>
-                        <Form.Control 
-                            as="textarea" 
-                            rows="3" 
-                            id="instructions"
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Button variant="dark" type="submit">Submit</Button>
-            </Form>
-        </Container>
-    );
-}
 
 function handleResetPassword() {
     let message = document.getElementById('resetMessage');
