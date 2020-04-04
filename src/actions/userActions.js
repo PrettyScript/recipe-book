@@ -2,46 +2,71 @@ import { FETCH_USER, CURRENT_USER } from './types';
 import axios from 'axios';
 
 export const fetchUser = (username, password ) => dispatch => {
-    return axios.post('http://localhost:3000/login', {username, password})
+    return async function (dispatch) {
+       await axios.post('http://localhost:3000/login', {username, password})
         .then((data) => {
             let firstName = data.data[0];
-            console.log(firstName)
-            dispatch(successfulLogin(data)) 
-            return firstName;
+            console.log(firstName, 'hey')
+            // dispatch(successfulLogin(data)) 
+            // return firstName;
+            return dispatch({
+                type: FETCH_USER,
+                data: data
+            })
         })
         .catch((err) => {
             console.log(err);
             return err;
         });
-}
-
-const successfulLogin = (data) => {
-    return {
-        type: FETCH_USER,
-        data: data
     }
-    
 }
 
-export const currentUser = (username) => dispatch => {
+// const successfulLogin = (data) => {
+//     return {
+//         type: FETCH_USER,
+//         data: data
+//     }
+    
+// }
+
+// export const currentUser = (username) => dispatch => {
+//     console.log('show first name');
+    
+//     axios.post('http://localhost:3000/getName', {username})
+//     .then((data) => {
+//         console.log(data); 
+//         dispatch(displayFirstName(data))
+//     })
+//     .catch((err) => {
+//         console.log(err) });
+
+// }
+
+export const currentUser = () => dispatch => {
     console.log('show first name');
-    
-    axios.post('http://localhost:3000/getName', {username})
-    .then((data) => {
-        console.log(data); 
-        dispatch(displayFirstName(data))
+    dispatch({
+        
+            type: CURRENT_USER
+        
     })
-    .catch((err) => {
-        console.log(err) });
+    
+    // axios.post('http://localhost:3000/getName', {username})
+    // .then((data) => {
+    //     console.log(data); 
+    //     dispatch(displayFirstName(data))
+    // })
+    // .catch((err) => {
+    //     console.log(err) });
 
 }
 
-const displayFirstName = (data) => {
-    return {
-        type: CURRENT_USER,
-        payload: data
-    }
-}
+
+// const displayFirstName = (data) => {
+//     return {
+//         type: CURRENT_USER,
+//         payload: data
+//     }
+// }
 
 
 // let username = 'test'

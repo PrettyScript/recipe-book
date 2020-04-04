@@ -2,15 +2,13 @@ import React from 'react';
 import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
 import { Button, Form, Container } from 'react-bootstrap';
 import axios from 'axios';
-import Test from './components/testPage';
 import Home from './components/HomePage';
 import Login from './components/LoginPage';
-import Test2 from './components/test2Page';
-import { UserContext } from './UserContext';
-import Posts from './components/Posts';
 
-import { Provider } from 'react-redux';
-import store from './store';
+
+import { AuthProvider } from './Auth';
+import PrivateRoute from './PrivateRoute';
+import SignUp from './SignUp';
 
 
 //Provider is the glue for react and redux
@@ -22,56 +20,48 @@ export default class Router extends React.Component {
         super();
 
         this.state = {
-            username: 'it works!'
+            username: ''
         }
       
         // this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
     }
 
-    // handleSuccessfulAuth(data) {
-    //     // this.props.handleLogin(data);
-    //     this.props.history.push("/");
-    //   }
-    // another way to use UserContext but component not accepting it so it's best to just pass the value inline 
-    // const [value, setValue] = useState('hello from context');
-    
-
     render() {
-        
       
         return (
-            <Provider store={store}>
+            <AuthProvider>
                 <BrowserRouter>
                     <div>
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/login">Login</NavLink>
-                        <NavLink to="/createaccount">Create Account</NavLink>
+                        <NavLink to="/signup">Sign Up</NavLink>
                         <NavLink to="/createrecipes">Create Recipes</NavLink>
                         <NavLink to="/resetpassword">Reset Password</NavLink>
-                        <NavLink to="/test">Test Page</NavLink>
-                        <NavLink to="/test2">Test 2 Page</NavLink>
-                        <NavLink to="/posts">Redux Example Posts</NavLink>
+                        <NavLink to={{
+                                pathname:'/hometest',
+                                state: {
+                                    username: this.state.username
+                                }
+                            }}
+                            >HomeTestPage
+                        </NavLink>
                     </div>
 
                     <hr /> 
 
                     <div>
                         <Switch>
-                            <Route 
+                            <PrivateRoute
                                 exact 
                                 path="/" 
-                                render={props => (
-                                    <Home {... props} handleLogin={this.handleLogin} 
-                                    />
-                                )}
+                                component={Home}
                             />
                             <Route 
                                 path="/login" 
                                 component={Login}
-                                // handleSuccessfulAuth={this.handleSuccessfulAuth}
                             />
-                            <Route path="/createAccount">
-                                <CreateAccount />
+                            <Route path="/signup">
+                                <SignUp />
                             </Route>
                             <Route path="/createrecipes">
                                 <CreateRecipes />
@@ -79,26 +69,10 @@ export default class Router extends React.Component {
                             <Route path="/resetpassword">
                                 <ResetPassword />
                             </Route>
-                            <Route 
-                                path="/posts"
-                                component={Posts}
-                            />
-                            <UserContext.Provider value='hello from context'>
-                                <Route 
-                                    path="/test"
-                                    render={props => (
-                                        <Test {... props} username={this.state.username} />
-                                    )}
-                                /> 
-                                <Route 
-                                        path="/test2"
-                                        component={Test2}
-                                />
-                            </UserContext.Provider>
                         </Switch>
                     </div>
                 </BrowserRouter>
-            </Provider>
+            </AuthProvider>
         );
     }
 }
@@ -133,70 +107,7 @@ function handleNewAccount(e) {
     }).catch((err) => {console.log(err)});
 }
 
-function CreateAccount() {
-    return (
-        <Container>
-            <Form onSubmit={handleNewAccount}>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="text" 
-                            name="firstName" 
-                            placeholder="First Name" 
-                            id="firstName"
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="text" 
-                            name="lastName"
-                            placeholder="Last Name" 
-                            id="lastName"
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="text" 
-                            name="username"
-                            placeholder="Username" 
-                            id="username"
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="email" 
-                            name="email"
-                            placeholder="Email" 
-                            id="email"
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group>
-                        <Form.Control 
-                            type="password" 
-                            name="password"
-                            placeholder="Password" 
-                            id="password"
-                            required 
-                        />
-                    </Form.Group>
-                </Form.Row>
-                <Button variant="dark" type="submit">Submit</Button>
-            </Form>
-        </Container>
-    );
-}
+
 
 function handleCreatedRecipes(e) {
     e.preventDefault();

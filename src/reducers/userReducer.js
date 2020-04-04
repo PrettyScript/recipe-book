@@ -5,18 +5,18 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
-    switch (action.type) {
+    const { type, payload } = action;
+    switch (type) {
         // handle a particular action type
         case FETCH_USER:
             // return the new state
             return {
                 ...state,
-                username: action.payload
+                username: payload
             };
         case CURRENT_USER:
             return {
-                ...state,
-                username: action.payload
+                username: 'Jessica' 
             };
         default:
             //always return state
