@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
-import { Button, Form, Container } from 'react-bootstrap';
-import axios from 'axios';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 import Home from './components/HomePage';
 import Login from './components/LoginPage';
 
@@ -11,42 +10,19 @@ import PrivateRoute from './PrivateRoute';
 import SignUp from './SignUp';
 import CreateRecipes from './components/CreateRecipes';
 
+import { Layout } from './components/Layout';
+import { NavigationBar } from './components/NavigationBar';
+
+
 
 
 export default class Router extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            username: 'test'
-        }
-      
-        // this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
-    }
-
     render() {
-      
         return (
             <AuthProvider>
                 <BrowserRouter>
-                    <div>
-                        <NavLink to="/">Home</NavLink>
-                        <NavLink to="/login">Login</NavLink>
-                        <NavLink to="/signup">Sign Up</NavLink>
-                        <NavLink to="/createrecipes">Create Recipes</NavLink>
-                        <NavLink to="/resetpassword">Reset Password</NavLink>
-                        <NavLink to={{
-                                pathname:'/hometest',
-                                state: {
-                                    username: this.state.username
-                                }
-                            }}
-                            >HomeTestPage
-                        </NavLink>
-                    </div>
-
-                    <hr /> 
-
+                <NavigationBar />
+                    <Layout>
                     <div>
                         <Switch>
                             <PrivateRoute
@@ -72,45 +48,12 @@ export default class Router extends React.Component {
                             </Route>
                         </Switch>
                     </div>
+                    </Layout>
                 </BrowserRouter>
             </AuthProvider>
         );
     }
 }
-
-
-function handleNewAccount(e) {
-    e.preventDefault();
-
-    let firstName = document.getElementById('firstName').value;
-    let lastName = document.getElementById('lastName').value;
-    let username = document.getElementById('username').value;
-    let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
-
-    let payload = {
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
-        email: email,
-        password: password
-      };
-
-    console.log(firstName, lastName, username, email, password);
-
-    //somehow get the form button to send over data to connection.query
-    //get the api to speak to the server
-    
-
-      axios.post('http://localhost:3000/addUser', payload)
-        .then((data) => {
-      console.log(data); // JSON data parsed by `response.json()` call
-    }).catch((err) => {console.log(err)});
-}
-
-
-
-
 
 
 

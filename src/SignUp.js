@@ -27,11 +27,6 @@ const SignUp = ({ history }) => {
   }, [history]);
 
 
-//   const dummyFunc = (payload) => {
-//       console.log("WORKING!!");
-//       console.log(payload);
-   
-//   } 
 
   return (
     <Container>
