@@ -24,3 +24,4 @@ yarn-error.log*
 
 //senstive information 
 .env
+spoonacular.js

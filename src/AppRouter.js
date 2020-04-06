@@ -11,7 +11,8 @@ import SignUp from './SignUp';
 import CreateRecipes from './components/CreateRecipes';
 
 import { Layout } from './components/Layout';
-import { NavigationBar } from './components/NavigationBar';
+import NavigationBar  from './components/NavigationBar';
+import searchResults from './components/searchResults';
 
 
 
@@ -46,6 +47,10 @@ export default class Router extends React.Component {
                             <Route path="/resetpassword">
                                 <ResetPassword />
                             </Route>
+                            <Route
+                                path="/searchresults"
+                                component={searchResults}
+                            />
                         </Switch>
                     </div>
                     </Layout>

@@ -38,7 +38,7 @@ export default class HomePage extends Component {
     
         return (
             <div>
-                <h1>Hello <span id="username">{this.state.firstName}</span> </h1>
+                <h1>Hello <span id="username">{this.state.firstName}!</span> </h1>
                 <p id="summary"></p>
                 <button
                     onClick={() => app.auth().signOut()}
