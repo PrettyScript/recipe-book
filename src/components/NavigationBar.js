@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, Form, FormControl, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -19,28 +19,24 @@ const Styles = styled.div`
 
 export const NavigationBar = () => (
   <Styles>
-    <Navbar expand="lg">
-      <Navbar.Brand href="/">Sweet Recipes</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto">
-          <Nav.Item>
+    <Navbar bg="dark" variant="dark">
+        <Navbar.Brand href="#home">Sweet Recipes</Navbar.Brand>
+        <Nav className="mr-auto">
+        <Nav.Link>
             <Link to="/">Home</Link>
-          </Nav.Item>
-          <Nav.Item>
-              <Link to="/login">Login</Link>
-          </Nav.Item>
-          <Nav.Item>
-              <Link to="/signup">Sign Up</Link>
-          </Nav.Item>
-          <Nav.Item>
-              <Link to="/createrecipes">Create Recipes</Link>
-          </Nav.Item>
-          <Nav.Item>
-              <Link to="/resetpassword">Reset Password</Link>
-          </Nav.Item>
-        </Nav>
-      </Navbar.Collapse>
+        </Nav.Link>
+        <Nav.Link>
+            <Link to="/login">Login</Link>
+        </Nav.Link>
+        <Nav.Link>
+            <Link to="/createrecipes">Create Recipes</Link>
+        </Nav.Link>
+    </Nav>
+    <Form inline>
+        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+        <Button variant="outline-info">Search</Button>
+    </Form>
     </Navbar>
   </Styles>
 );
+
