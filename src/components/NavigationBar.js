@@ -44,7 +44,6 @@ class NavigationBar extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        console.log('yay');
         console.log(this.state.searchValue);
         this.props.history.push({
           pathname: '/searchresults',

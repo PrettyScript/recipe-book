@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { spoonacular } from '../spoonacular';
+import Recipe from './recipes/Recipe';
 
 export default class SearchResults extends Component {
     constructor() {
@@ -11,30 +12,43 @@ export default class SearchResults extends Component {
         }
     }
 
+    //TODO: User Stories 
+    //-Fix the re-render of search bar 
+    //- create an IF statement for unavailable images
+    //how to show more than 10 items from results - Hugh 
+    //- create an API callback that will populate receipe summary 
+
+
     async componentDidMount() {
+        //get search results 
         let userInput = encodeURIComponent(this.props.location.searchValue);
         console.log(userInput);
         let requestUrl = `https://api.spoonacular.com/recipes/search?apiKey=${spoonacular.apiKey}&query=${userInput}`;
         const request = await fetch(requestUrl);
         const response = await request.json();
-        console.log(response.results);
+
+        // for (let i = 0; i < response.results.length; i++) {
+        //     someId 
+        // }
+
+        console.log(response.results[0].id);
         this.setState({
             recipes: response.results
-        });
+        });         
     }
-
-    
-    
-
 
     render() {
         const { recipes } = this.state
-        // const recipeImg = `https://spoonacular.com/recipeImages/${recipe.id}-312x231.jpg`;
-    
+        
         return (
             <div>
                 <h1>Search Results</h1>
-                {recipes.map(recipe => <img src={`https://spoonacular.com/recipeImages/${recipe.id}-312x231.jpg`} key={recipe.id} alt={recipe.title}></img>)}
+                {recipes.map(recipe => <Recipe 
+                        recipeImageUrl={`https://spoonacular.com/recipeImages/${recipe.id}-312x231.jpg`} 
+                        key={recipe.id} 
+                        recipeTitle={recipe.title} 
+                        recipeId={recipe.id}
+                />)}
             </div>
         )
     }

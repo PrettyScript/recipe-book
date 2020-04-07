@@ -12,7 +12,7 @@ import CreateRecipes from './components/CreateRecipes';
 
 import { Layout } from './components/Layout';
 import NavigationBar  from './components/NavigationBar';
-import searchResults from './components/searchResults';
+import SearchResults from './components/SearchResults';
 
 
 
@@ -49,7 +49,7 @@ export default class Router extends React.Component {
                             </Route>
                             <Route
                                 path="/searchresults"
-                                component={searchResults}
+                                component={SearchResults}
                             />
                         </Switch>
                     </div>
