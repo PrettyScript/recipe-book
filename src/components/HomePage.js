@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import app from '../firebase';
+import { spoonacular } from '../spoonacular'
 
 import axios from 'axios';
 
@@ -11,7 +12,8 @@ export default class HomePage extends Component {
         super(props);
 
         this.state = {
-            firstName: ''
+            firstName: '',
+            randomTrivia: ''
         }
     }
 
@@ -31,15 +33,28 @@ export default class HomePage extends Component {
         .catch((err) => {console.log(err) });
     }
 
+    async componentDidMount() {
+        let requestUrl = `https://api.spoonacular.com/food/trivia/random?apiKey=${spoonacular.apiKey}`;
+        const request = await fetch(requestUrl);
+        const response = await request.json();
+        console.log(response);
+        this.setState({
+            randomTrivia: response.text
+        })
+    }
+
+    
+    
+
     
 
     render() {
+        const { randomTrivia } = this.state;
 
-    
         return (
             <div>
                 <h1>Hello <span id="username">{this.state.firstName}!</span> </h1>
-                <p id="summary"></p>
+                <p>{randomTrivia}</p>
                 <button
                     onClick={() => app.auth().signOut()}
                 >Sign out</button>

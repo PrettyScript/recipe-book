@@ -10,9 +10,6 @@ export default class CreateRecipes extends Component {
     constructor(props){
         super(props) 
 
-        // app.initializeApp(app.firebase);
-        // this.db = this.app.database().ref().child('createrecipes')
-
         this.state = {
             username: '',
             title: '',
@@ -23,24 +20,6 @@ export default class CreateRecipes extends Component {
 
     } 
 
-        // writeUserData = () => {
-        //     app.database().ref('/createrecipes').set(this.state);
-        //     console.log('DATA SAVED');
-        // }
-      
-    //   getUserData = () => {
-    //     let ref = Firebase.database().ref('/');
-    //     ref.on('value', snapshot => {
-    //       const state = snapshot.val();
-    //       this.setState(state);
-    //     });
-    //     console.log('DATA RETRIEVED');
-    //   }
-
-    // componentWillMount() {
-    //     const 
-    // }
-    
 
     handleCreatedRecipes(e) {
         e.preventDefault();
@@ -70,7 +49,7 @@ export default class CreateRecipes extends Component {
     render() {
         return (
             <Container>
-                <Form>
+                <Form onSubmit={this.handleCreatedRecipes}>
                     <Form.Row>
                         <Form.Group>
                             <Form.Control 

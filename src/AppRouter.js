@@ -8,7 +8,7 @@ import Login from './components/LoginPage';
 import { AuthProvider } from './Auth';
 import PrivateRoute from './PrivateRoute';
 import SignUp from './SignUp';
-import CreateRecipes from './components/CreateRecipes';
+import CreateRecipes from './components/recipes/CreateRecipes';
 
 import { Layout } from './components/Layout';
 import NavigationBar  from './components/NavigationBar';
