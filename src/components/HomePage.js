@@ -3,6 +3,7 @@ import app from '../firebase';
 import { spoonacular } from '../spoonacular'
 
 import axios from 'axios';
+import SavedRecipes from './recipes/SavedRecipes';
 
 
 
@@ -18,6 +19,7 @@ export default class HomePage extends Component {
     }
 
     //TODO: create a TIMEOUT so the name will show up immediately after signing up
+    // - Create a component that will display saved recipes on right side of the page
 
     componentWillMount() {
         this.displayFirstName();
@@ -43,11 +45,6 @@ export default class HomePage extends Component {
         })
     }
 
-    
-    
-
-    
-
     render() {
         const { randomTrivia } = this.state;
 
@@ -58,6 +55,7 @@ export default class HomePage extends Component {
                 <button
                     onClick={() => app.auth().signOut()}
                 >Sign out</button>
+                <SavedRecipes />
             </div>
         );
     }
