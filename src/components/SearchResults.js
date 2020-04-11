@@ -17,6 +17,7 @@ export default class SearchResults extends Component {
     //- create an IF statement for unavailable images
     //how to show more than 10 items from results - Hugh 
     //- create an API callback that will populate receipe summary 
+    // - add userinput to state for refresh capability 
 
 
     async componentDidMount() {

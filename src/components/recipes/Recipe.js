@@ -5,22 +5,20 @@ export default class Recipe extends Component {
     constructor() {
         super()
 
-        this.state = {
-            recipeDescription: ''
-        }
+        
     }
 
-    async componentDidMount() {
-        const { recipeId } = this.props;
-         //get recipe summary for the populated results
-         let recipeSummary = `https://api.spoonacular.com/recipes/${recipeId}/summary?apiKey=${spoonacular.apiKey}`;
-         const req = await fetch(recipeSummary);
-         const res = await req.json();
-         console.log(res);
-         this.setState({
-            recipeDescription: res.summary
-         })
-    }
+    // async componentDidMount() {
+    //     const { recipeId } = this.props;
+    //      //get recipe summary for the populated results
+    //      let recipeSummary = `https://api.spoonacular.com/recipes/${recipeId}/summary?apiKey=${spoonacular.apiKey}`;
+    //      const req = await fetch(recipeSummary);
+    //      const res = await req.json();
+    //      console.log(res);
+    //      this.setState({
+    //         recipeDescription: res.summary
+    //      })
+    // }
     
 
     render() {
@@ -30,7 +28,6 @@ export default class Recipe extends Component {
             <div>
                 <img src={recipeImageUrl} />
                 <p>{recipeTitle}</p>
-                <p>{recipeDescription}</p>
             </div>
         )
     }
