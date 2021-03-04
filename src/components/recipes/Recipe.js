@@ -23,7 +23,7 @@ export default class Recipe extends Component {
 
     render() {
         const { recipeImageUrl, recipeTitle } = this.props;
-        const { recipeDescription } = this.state;
+        // const { recipeDescription } = this.state;
         return (
             <div>
                 <img src={recipeImageUrl} />

@@ -8,7 +8,8 @@ export default class SearchResults extends Component {
         super()
 
         this.state = {
-            recipes: []
+            recipes: [],
+            userInput: ''
         }
     }
 
@@ -20,23 +21,25 @@ export default class SearchResults extends Component {
     // - add userinput to state for refresh capability 
 
 
-    async componentDidMount() {
-        //get search results 
-        let userInput = encodeURIComponent(this.props.location.searchValue);
-        console.log(userInput);
-        let requestUrl = `https://api.spoonacular.com/recipes/search?apiKey=${spoonacular.apiKey}&query=${userInput}`;
-        const request = await fetch(requestUrl);
-        const response = await request.json();
+    // async componentDidMount() {
+    //     //get search results 
+    //     let userInput = encodeURIComponent(this.props.location.searchValue) ? encodeURIComponent(this.props.location.searchValue) : this.state.userInput; 
+    //     console.log(userInput);
+    //     let requestUrl = `https://api.spoonacular.com/recipes/search?apiKey=${spoonacular.apiKey}&query=${userInput}`;
+    //     const request = await fetch(requestUrl);
+    //     const response = await request.json();
 
-        // for (let i = 0; i < response.results.length; i++) {
-        //     someId 
-        // }
+    //     // for (let i = 0; i < response.results.length; i++) {
+    //     //     someId 
+    //     // }
 
-        console.log(response.results[0].id);
-        this.setState({
-            recipes: response.results
-        });         
-    }
+    //     // console.log(response.results[0].id);
+    //     this.setState({
+    //         recipes: response.results,
+    //         userInput: userInput
+    //     });     
+        
+    // }
 
     render() {
         const { recipes } = this.state

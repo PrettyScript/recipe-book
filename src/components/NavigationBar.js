@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Nav, Navbar, Form, FormControl, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import { withRouter } from "react-router";
+import { spoonacular } from '../spoonacular';
+
+
 
 const Styles = styled.div`
   .navbar {
@@ -48,6 +51,13 @@ class NavigationBar extends Component {
         this.setState({
           searchValue: this.state.searchValue
         })
+        console.log(this.state.searchValue)
+          let requestUrl = `https://api.spoonacular.com/recipes/search?apiKey=${spoonacular.apiKey}&query=${this.state.searchValue}`;
+          fetch(requestUrl)
+          .then((data) => {console.log(data)})
+          .catch((err) => {console.log(err)});  
+          // const response = await request.json();
+          // console.log(response);
         this.props.history.push({
           pathname: '/searchresults',
           searchValue: this.state.searchValue

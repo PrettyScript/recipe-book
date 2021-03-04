@@ -35,15 +35,15 @@ export default class HomePage extends Component {
         .catch((err) => {console.log(err) });
     }
 
-    async componentDidMount() {
-        let requestUrl = `https://api.spoonacular.com/food/trivia/random?apiKey=${spoonacular.apiKey}`;
-        const request = await fetch(requestUrl);
-        const response = await request.json();
-        console.log(response);
-        this.setState({
-            randomTrivia: response.text
-        })
-    }
+    // async componentDidMount() {
+    //     let requestUrl = `https://api.spoonacular.com/food/joke/random?apiKey=${spoonacular.apiKey}`;
+    //     const request = await fetch(requestUrl);
+    //     const response = await request.json();
+    //     console.log(response);
+    //     this.setState({
+    //         randomTrivia: response.text
+    //     })
+    // }
 
     render() {
         const { randomTrivia } = this.state;
